@@ -46,6 +46,8 @@ export default function TabOneScreen() {
         <FlatList 
           data={movies}
           numColumns={2}
+          contentContainerStyle={{gap : 5, padding: 5}}
+          columnWrapperStyle={{gap: 5}}
           renderItem={({item}) => <MovieListItem movie={item}/>}
         />
     </View>
