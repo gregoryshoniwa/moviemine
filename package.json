@@ -2,6 +2,7 @@
   "name": "moviemine",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -15,6 +16,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
     "@react-navigation/native": "^6.0.2",
+    "@tanstack/react-query": "^5.40.0",
     "expo": "~51.0.8",
     "expo-font": "~12.0.5",
     "expo-linking": "~6.3.1",

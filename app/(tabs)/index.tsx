@@ -2,33 +2,37 @@ import { StyleSheet,Text,FlatList, ActivityIndicator } from 'react-native';
 import { View } from '@/components/Themed';
 import { useEffect, useState } from 'react';
 import {fetchTopRatedMovies} from '@/api/movies';
+import { useQuery } from '@tanstack/react-query';
+import MovieListItem from '@/components/MovieListItem';
 
-interface Movie {
-  title: string;
-  // Add other properties of the movie object here
-}
+// interface Movie {
+//   title: string;
+//   // Add other properties of the movie object here
+// }
 export default function TabOneScreen() {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const { data: movies, isLoading, error} = useQuery({queryKey : ['movies'],queryFn : fetchTopRatedMovies});
 
-  useEffect(() => {
-    getMovies();
-  },[])
+  //console.log(query);
 
-  const getMovies = async () => {
-    setIsLoading(true);
-    try{
-      const movies = await fetchTopRatedMovies();
-      setMovies(movies);
-      setIsLoading(false);
-    }catch(e: any){
-      setError(e);
-      setIsLoading(false);
-    }
-   
-    
-  }
+  // const [movies, setMovies] = useState<Movie[]>([]);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [error, setError] = useState<Error | null>(null);
+
+  // useEffect(() => {
+  //   getMovies();
+  // },[])
+
+  // const getMovies = async () => {
+  //   setIsLoading(true);
+  //   try{
+  //     const movies = await fetchTopRatedMovies();
+  //     setMovies(movies);
+  //     setIsLoading(false);
+  //   }catch(e: any){
+  //     setError(e);
+  //     setIsLoading(false);
+  //   }
+  // }
 
   if(isLoading){
     return <ActivityIndicator />
@@ -41,11 +45,8 @@ export default function TabOneScreen() {
     <View style={styles.container}>
         <FlatList 
           data={movies}
-          renderItem={({item}) => (
-          <View>
-            <Text>{item.title}</Text>
-            </View>
-            )}
+          numColumns={2}
+          renderItem={({item}) => <MovieListItem movie={item}/>}
         />
     </View>
   );
@@ -54,8 +55,8 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 
 });
+
+
