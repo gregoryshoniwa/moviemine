@@ -18,3 +18,17 @@ export const addMovieToWatchList = async (movieId: any) => {
     const data = await response.json();
     return data;
 }
+
+export const fetchWatchListMovies = async () => {
+    
+const url = 'https://api.themoviedb.org/3/account/11829029/watchlist/movies';
+const options = {
+  method: 'GET',
+  headers
+};
+
+const reponse = await fetch(url, options);
+if(!reponse.ok) throw new Error('Something went wrong, Failed to get watchlist');
+const data = await reponse.json();
+return data.results;
+}

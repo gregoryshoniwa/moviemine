@@ -1,20 +1,26 @@
 import { View, Text, ActivityIndicator,Image, Pressable } from 'react-native'
 import React from 'react'
 import { Stack, useLocalSearchParams } from 'expo-router'
-import { useQuery,useMutation } from '@tanstack/react-query';
+import { useQuery,useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchMoive } from '@/api/movies';
 import { FontAwesome } from '@expo/vector-icons';
 import { addMovieToWatchList } from '@/api/watchlist';
 
 const MovieDetails = () => {
   const { id } = useLocalSearchParams();
+  const client = useQueryClient();
+
   const { data: movie, isLoading, error } = useQuery({
     queryKey: ['movies', id],
     queryFn: () => fetchMoive(id),
   })
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: () => addMovieToWatchList(movie?.id),
+    onSuccess: () => {
+        client.invalidateQueries({ queryKey: ['watchlist'] });
+      alert('Movie added to watchlist');
+    }
     })
 
 
@@ -34,11 +40,15 @@ const MovieDetails = () => {
       <View style={{padding: 10}}>
         <Text style={{fontSize: 20, fontWeight: 'bold',marginVertical: 10}}>{movie.title}</Text>
         <View style={{marginVertical : 10}}>
-            <Pressable 
+            {isPending
+            ? <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}><FontAwesome name='bookmark' size={24} /><Text>Adding ....</Text></View>
+            : <Pressable 
                 onPress={() => mutate()} style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
                 <FontAwesome name='bookmark' size={24} />
                 <Text>Add to watchlist</Text>
             </Pressable>
+            }
+            
         </View>
         <Text style={{fontSize: 16}}>{movie.overview}</Text>
       </View>
