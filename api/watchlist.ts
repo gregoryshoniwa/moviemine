@@ -21,7 +21,7 @@ export const addMovieToWatchList = async (movieId: any) => {
 
 export const fetchWatchListMovies = async () => {
     
-const url = 'https://api.themoviedb.org/3/account/11829029/watchlist/movies';
+const url = 'https://api.themoviedb.org/3/account/11829029/watchlist/movies?sort_by=created_at.desc';
 const options = {
   method: 'GET',
   headers
